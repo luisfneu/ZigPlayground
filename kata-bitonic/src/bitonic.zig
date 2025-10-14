@@ -14,6 +14,7 @@ pub fn gerarBitonica(alloc: std.mem.Allocator, tamanho: usize, minimo: i32, maxi
     var atual = maximo;
     while (atual >= minimo and lista.items.len < tamanho) : (atual -= 1) {
         try lista.append(alloc, atual);
+
     }
 
     atual = maximo - 2;
