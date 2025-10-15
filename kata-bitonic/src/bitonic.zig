@@ -1,26 +1,25 @@
 const std = @import("std");
 
-pub fn gerarBitonica(alloc: std.mem.Allocator, tamanho: usize, minimo: i32, maximo: i32) ![]i32 {
-    const limite_maximo = (maximo - minimo) * 2 + 1;
-    var lista = try std.ArrayList(i32).initCapacity(alloc, tamanho);
-    defer lista.deinit(alloc);
+pub fn bitonicArray(allocator: std.mem.Allocator, n: usize, l: i32, r: i32) ![]i32 {
+    const max_possible = (r - l) * 2 + 1;
+    var deque = try std.ArrayList(i32).initCapacity(allocator, n);
+    defer deque.deinit(allocator);
 
-    if (tamanho > limite_maximo) {
-        return error.EntradaInvalida;
+    if (n > max_possible) {
+        return error.InvalidInput;
     }
 
-    try lista.append(alloc, maximo - 1);
+    try deque.append(allocator, r - 1);
 
-    var atual = maximo;
-    while (atual >= minimo and lista.items.len < tamanho) : (atual -= 1) {
-        try lista.append(alloc, atual);
-
+    var i = r;
+    while (i >= l and deque.items.len < n) : (i -= 1) {
+        try deque.append(allocator, i);
     }
 
-    atual = maximo - 2;
-    while (atual >= minimo and lista.items.len < tamanho) : (atual -= 1) {
-        try lista.insert(alloc, 0, atual);
+    i = r - 2;
+    while (i >= l and deque.items.len < n) : (i -= 1) {
+        try deque.insert(allocator, 0, i);
     }
 
-    return lista.toOwnedSlice(alloc);
+    return deque.toOwnedSlice(allocator);
 }
